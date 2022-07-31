@@ -1,10 +1,13 @@
 const express = require('express');
+const cors = require('cors');
 const port = 3000;
 const app = express();
 
 /* Novo trecho */
 app.use(express.json());
+app.use(cors());
 /* Novo Trecho */
+
 
 /* NOVO TRECHO */
 const paletas = [
