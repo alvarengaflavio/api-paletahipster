@@ -53,3 +53,6 @@ app.get('/paletas/paleta-id/:id', (req, res) => {
 app.listen(port, () => {
   console.log(`Server listening on http://localhost:${port}`);
 });
+
+
+/*    npm run dev     */
