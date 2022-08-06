@@ -40,11 +40,11 @@ const createPaletaController = async (req, res) => {
   res.status(201).send(newPaleta);
 };
 
-const updatePaletaController = (req, res) => {
-  const idParam = Number(req.params.id);
+const updatePaletaController = async (req, res) => {
+  const idParam = req.params.id;
 
-  if (!idParam) {
-    return res.status(400).send({ message: 'ID not specified!' });
+  if (!mongoose.Types.ObjectId.isValid(idParam)) {
+    return res.status(400).send({ message: 'Invalid ID!' });
   }
 
   const paletaEdit = req.body;
@@ -60,25 +60,31 @@ const updatePaletaController = (req, res) => {
       message: "You didin't fill all the required data fields",
     });
 
-  const updatedPaleta = paletasService.updatePaletaService(idParam, paletaEdit);
+  const updatedPaleta = await paletasService.updatePaletaService(
+    idParam,
+    paletaEdit,
+  );
   res.send(updatedPaleta);
 };
 
-const deletePaletaController = (req, res) => {
-  const idParam = Number(req.params.id);
+const deletePaletaController = async (req, res) => {
+  try {
+    const idParam = req.params.id;
+    if (!mongoose.Types.ObjectId.isValid(idParam)) {
+      throw new Error('ID not found!');
+    }
+    const deletedPaleta = await paletasService.deletePaletaService(idParam);
+    if (deletedPaleta === null || deletedPaleta === null) {
+      throw new Error('ID not found!');
+    }
 
-  if (!idParam)
-    return res.status(400).send({ message: 'ID not valid or not specified!' });
-
-  const index = paletasService
-    .findAllPaletasService()
-    .findIndex((e) => Number(e.id) === idParam);
-
-  if (index === -1)
-    return res.status(400).send({ message: 'ID is not present' });
-
-  const deletedPaleta = paletasService.deletePaletaService(idParam);
-  res.send({ message: 'Paleta deleted with success!', paleta: deletedPaleta });
+    res.send({
+      message: 'Successfully deleted Palette!',
+      palette: deletedPaleta,
+    });
+  } catch (err) {
+    return res.status(400).send(err.message);
+  }
 };
 
 module.exports = {

@@ -17,16 +17,18 @@ const createPaletaService = async (newPaleta) => {
   return paletaCreated;
 };
 
-const updatePaletaService = (id, paletaEdited) => {
-  paletaEdited['id'] = id;
-  const paletaIndex = paletas.findIndex((paleta) => paleta.id === id);
-  paletas[paletaIndex] = paletaEdited;
-  return paletaEdited;
+const updatePaletaService = async (id, paletaEdited) => {
+  /* The default value for the new option of findByIdAndUpdate/findOneAndUpdate has changed to false, which means returning the old doc. So you need to explicitly set the option to true to get the new version of the doc, after the update is applied */
+  const paletaUpdate = await Paletas.findByIdAndUpdate(id, paletaEdited, {
+    new: true,
+  });
+  return paletaUpdate;
 };
 
-const deletePaletaService = (id) => {
-  const paletaIndex = paletas.findIndex((paleta) => paleta.id === id);
-  return paletas.splice(paletaIndex, 1);
+const deletePaletaService = async (id) => {
+  // const deletedPaleta = await Paletas.findByIdAndDelete(id);
+  // return deletedPaleta;
+  return await Paletas.findByIdAndDelete(id);
 };
 
 module.exports = {
