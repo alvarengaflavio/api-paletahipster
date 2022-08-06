@@ -22,7 +22,7 @@ const findByIdPaletaController = async (req, res) => {
   res.send(chosenPaleta);
 };
 
-const createPaletaController = (req, res) => {
+const createPaletaController = async (req, res) => {
   const paleta = req.body;
 
   if (
@@ -36,8 +36,8 @@ const createPaletaController = (req, res) => {
       message: "You didin't fill all the required data fields",
     });
 
-  const newPaleta = paletasService.createPaletaService(paleta);
-  res.send(newPaleta);
+  const newPaleta = await paletasService.createPaletaService(paleta);
+  res.status(201).send(newPaleta);
 };
 
 const updatePaletaController = (req, res) => {
