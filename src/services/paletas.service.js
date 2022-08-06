@@ -1,12 +1,15 @@
-const db = require('../../mocks/paletas');
-const paletas = db.paletas;
+// const db = require('../../mocks/paletas');
+// const paletas = db.paletas;
 
-const findAllPaletasService = () => {
+const Paletas = require('../models/Paleta');
+
+const findAllPaletasService = async () => {
+  const paletas = await Paletas.find();
   return paletas;
 };
 
-const findByIdPaletaService = (id) => {
-  return paletas.find((paleta) => paleta.id === id);
+const findByIdPaletaService = async (id) => {
+  return await Paletas.findById(id);
 };
 
 const createPaletaService = (newPaleta) => {
