@@ -2,69 +2,76 @@ const paletasService = require('../services/paletas.service');
 const mongoose = require('mongoose');
 
 const findAllPaletasController = async (req, res) => {
-  const allPaletas = await paletasService.findAllPaletasService();
-  res.send(allPaletas);
+  try {
+    const allPaletas = await paletasService.findAllPaletasService();
+    res.send(allPaletas);
+  } catch (err) {
+    res.status(400).send({ message: err.message });
+  }
 };
 
 const findByIdPaletaController = async (req, res) => {
-  const idParam = req.params.id;
+  try {
+    const idParam = req.params.id;
+    if (!mongoose.Types.ObjectId.isValid(idParam)) {
+      throw new Error('Invalid ID parameter');
+    }
+    const chosenPaleta = await paletasService.findByIdPaletaService(idParam);
+    if (!chosenPaleta) {
+      throw new Error('ID not found');
+    }
 
-  if (!mongoose.Types.ObjectId.isValid(idParam)) {
-    return res.status(400).send({ message: 'ID not valid!' });
+    res.send(chosenPaleta);
+  } catch (err) {
+    res.status(400).send({ message: err.message });
   }
-
-  const chosenPaleta = await paletasService.findByIdPaletaService(idParam);
-
-  if (!chosenPaleta) {
-    return res.status(400).send({ message: 'Paleta not found!' });
-  }
-
-  res.send(chosenPaleta);
 };
 
 const createPaletaController = async (req, res) => {
-  const paleta = req.body;
+  try {
+    const paleta = req.body;
+    if (
+      !paleta ||
+      !paleta.sabor ||
+      !paleta.descricao ||
+      !paleta.foto ||
+      !paleta.preco
+    ) {
+      throw new Error('Invalid Paleta Json body');
+    }
 
-  if (
-    !paleta ||
-    !paleta.sabor ||
-    !paleta.descricao ||
-    !paleta.foto ||
-    !paleta.preco
-  )
-    return res.status(400).send({
-      message: "You didin't fill all the required data fields",
-    });
-
-  const newPaleta = await paletasService.createPaletaService(paleta);
-  res.status(201).send(newPaleta);
+    const newPaleta = await paletasService.createPaletaService(paleta);
+    res.status(201).send(newPaleta);
+  } catch (err) {
+    res.status(400).send({ message: err.message });
+  }
 };
 
 const updatePaletaController = async (req, res) => {
-  const idParam = req.params.id;
+  try {
+    const idParam = req.params.id;
+    if (!mongoose.Types.ObjectId.isValid(idParam)) {
+      throw new Error('Invalid ID parameter');
+    }
 
-  if (!mongoose.Types.ObjectId.isValid(idParam)) {
-    return res.status(400).send({ message: 'Invalid ID!' });
+    const paletaEdit = req.body;
+    if (
+      !paletaEdit ||
+      !paletaEdit.sabor ||
+      !paletaEdit.descricao ||
+      !paletaEdit.foto ||
+      !paletaEdit.preco
+    ) {
+      throw new Error('Invalid Paleta Json body');
+    }
+    const updatedPaleta = await paletasService.updatePaletaService(
+      idParam,
+      paletaEdit,
+    );
+    res.send(updatedPaleta);
+  } catch (err) {
+    res.status(400).send({ message: err.message });
   }
-
-  const paletaEdit = req.body;
-
-  if (
-    !paletaEdit ||
-    !paletaEdit.sabor ||
-    !paletaEdit.descricao ||
-    !paletaEdit.foto ||
-    !paletaEdit.preco
-  )
-    return res.status(400).send({
-      message: "You didin't fill all the required data fields",
-    });
-
-  const updatedPaleta = await paletasService.updatePaletaService(
-    idParam,
-    paletaEdit,
-  );
-  res.send(updatedPaleta);
 };
 
 const deletePaletaController = async (req, res) => {
@@ -83,7 +90,7 @@ const deletePaletaController = async (req, res) => {
       palette: deletedPaleta,
     });
   } catch (err) {
-    return res.status(400).send(err.message);
+    return res.status(400).send({ message: err.message });
   }
 };
 

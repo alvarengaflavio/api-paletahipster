@@ -10,4 +10,3 @@ const PaletaSchema = new mongoose.Schema({
 const Paleta = mongoose.model('paletas', PaletaSchema);
 
 module.exports = Paleta;
-
