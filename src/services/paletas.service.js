@@ -4,31 +4,32 @@
 const Paletas = require('../models/Paleta');
 
 const findAllPaletasService = async () => {
-  const paletas = await Paletas.find();
-  return paletas;
+  const allPaletas = await Paletas.find();
+  return allPaletas;
 };
 
 const findByIdPaletaService = async (id) => {
-  return await Paletas.findById(id);
+  const byIdPaleta = await Paletas.findById(id);
+  return byIdPaleta;
 };
 
 const createPaletaService = async (newPaleta) => {
-  const paletaCreated = await Paletas.create(newPaleta);
-  return paletaCreated;
+  const createdPaleta = await Paletas.create(newPaleta);
+  return createdPaleta;
 };
 
-const updatePaletaService = async (id, paletaEdited) => {
+const updatePaletaService = async (id, editedPaleta) => {
   /* The default value for the new option of findByIdAndUpdate/findOneAndUpdate has changed to false, which means returning the old doc. So you need to explicitly set the option to true to get the new version of the doc, after the update is applied */
-  const paletaUpdate = await Paletas.findByIdAndUpdate(id, paletaEdited, {
+  const updatedPaleta = await Paletas.findByIdAndUpdate(id, editedPaleta, {
     new: true,
   });
-  return paletaUpdate;
+  return updatedPaleta;
 };
 
 const deletePaletaService = async (id) => {
-  // const deletedPaleta = await Paletas.findByIdAndDelete(id);
-  // return deletedPaleta;
-  return await Paletas.findByIdAndDelete(id);
+  const deletedPaleta = await Paletas.findByIdAndDelete(id);
+  return deletedPaleta;
+  // return await Paletas.findByIdAndDelete(id);
 };
 
 module.exports = {
