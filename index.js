@@ -8,7 +8,7 @@ const port = 3000;
 const app = express();
 
 
-console.log(mongoURL);
+
 /* Novo trecho */
 connectToDatabase();
 /* Novo Trecho */
