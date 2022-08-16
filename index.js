@@ -4,18 +4,11 @@ const cors = require('cors');
 const routes = require('./src/routes/paletas.route');
 const port = {};
 
-if (process.env.NODE_ENV !== 'production') {
-  require('dotenv').config();
-  port.port = process.env.devPORT;
-  port.url = process.env.devURL;
-} else {
-  port.port = process.env.PORT;
-}
-// process.env.NODE_ENV !== 'production'
-//   ? (require('dotenv').config(),
-//     (port.port = process.env.devPORT),
-//     (port.url = process.env.devURL))
-//   : (port.port = process.env.PORT);
+process.env.NODE_ENV !== 'production'
+  ? (require('dotenv').config(),
+    (port.port = process.env.devPORT),
+    (port.url = process.env.devURL))
+  : ((port.port = process.env.PORT), (port.url = port.port));
 
 const connectToDatabase = require('./src/database/database');
 /* Novo trecho */
