@@ -6,6 +6,8 @@ const connectToDatabase = require('./src/database/database');
 const port = 3000;
 const app = express();
 
+
+console.log(process.env.mongoURL);
 /* Novo trecho */
 connectToDatabase();
 /* Novo Trecho */
