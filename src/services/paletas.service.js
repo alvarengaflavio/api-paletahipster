@@ -1,71 +1,35 @@
-const paletas = [
-  {
-    id: 1,
-    sabor: 'Açaí com Leite Condensado',
-    descricao:
-      'Quam vulputate dignissim suspendisse in est ante in nibh mauris.',
-    foto: 'assets/images/acai-com-leite-condensado.jpg',
-    preco: 10.0,
-  },
-  {
-    id: 2,
-    sabor: 'Banana com Nutella',
-    descricao:
-      'Lorem ipsum dolor sit amet consectetur adipisicing elit. Ipsum, distinctio!',
-    foto: 'assets/images/banana-com-nutella.png',
-    preco: 10.0,
-  },
-  {
-    id: 3,
-    sabor: 'Chocolate Belga',
-    descricao:
-      'Lorem ipsum dolor sit amet consectetur adipisicing elit. Unde, totam!',
-    foto: 'assets/images/chocolate-belga.png',
-    preco: 7.0,
-  },
-  {
-    id: 4,
-    sabor: 'Napotilano',
-    descricao:
-      'Lorem, ipsum dolor sit amet consectetur adipisicing elit. Mollitia, nisi?',
-    foto: 'assets/images/napolitano.png',
-    preco: 8.5,
-  },
-  {
-    id: 5,
-    sabor: 'Limão',
-    descricao:
-      'Lorem ipsum dolor sit amet consectetur adipisicing elit. Maiores, nihil.',
-    foto: 'assets/images/limao.png',
-    preco: 6.0,
-  },
-];
+// const db = require('../../mocks/paletas');
+// const paletas = db.paletas;
 
-const findAllPaletasService = () => {
-  return paletas;
+const Paletas = require('../models/Paleta');
+
+const findAllPaletasService = async () => {
+  const allPaletas = await Paletas.find();
+  return allPaletas;
 };
 
-const findByIdPaletaService = (id) => {
-  return paletas.find((paleta) => paleta.id === id);
+const findByIdPaletaService = async (id) => {
+  const byIdPaleta = await Paletas.findById(id);
+  return byIdPaleta;
 };
 
-const createPaletaService = (newPaleta) => {
-  const newId = paletas.length + 1;
-  newPaleta.id = newId;
-  paletas.push(newPaleta);
-  return newPaleta;
+const createPaletaService = async (newPaleta) => {
+  const createdPaleta = await Paletas.create(newPaleta);
+  return createdPaleta;
 };
 
-const updatePaletaService = (id, paletaEdited) => {
-  paletaEdited['id'] = id;
-  const paletaIndex = paletas.findIndex((paleta) => paleta.id === id);
-  paletas[paletaIndex] = paletaEdited;
-  return paletaEdited;
+const updatePaletaService = async (id, editedPaleta) => {
+  /* The default value for the new option of findByIdAndUpdate/findOneAndUpdate has changed to false, which means returning the old doc. So you need to explicitly set the option to true to get the new version of the doc, after the update is applied */
+  const updatedPaleta = await Paletas.findByIdAndUpdate(id, editedPaleta, {
+    new: true,
+  });
+  return updatedPaleta;
 };
 
-const deletePaletaService = (id) => {
-  const paletaIndex = paletas.findIndex((paleta) => paleta.id === id);
-  return paletas.splice(paletaIndex, 1);
+const deletePaletaService = async (id) => {
+  const deletedPaleta = await Paletas.findByIdAndDelete(id);
+  return deletedPaleta;
+  // return await Paletas.findByIdAndDelete(id);
 };
 
 module.exports = {

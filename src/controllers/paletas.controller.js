@@ -1,33 +1,66 @@
 const paletasService = require('../services/paletas.service');
+const mongoose = require('mongoose');
 
-const findAllPaletasController = (req, res) => {
-  const allPaletas = paletasService.findAllPaletasService();
-  res.send(allPaletas);
+const findAllPaletasController = async (req, res) => {
+  try {
+    const allPaletas = await paletasService.findAllPaletasService();
+    res.send(allPaletas);
+  } catch (err) {
+    res.status(400).send({ message: err.message });
+  }
 };
 
-const findByIdPaletaController = (req, res) => {
-  const idParam = Number(req.params.id);
-  const chosenPaleta = paletasService.findByIdPaletaService(idParam);
-  res.send(chosenPaleta);
+const findByIdPaletaController = async (req, res) => {
+  try {
+    const idParam = req.params.id;
+    const chosenPaleta = await paletasService.findByIdPaletaService(idParam);
+    if (!chosenPaleta) {
+      throw new Error('ID not found');
+    }
+    res.send(chosenPaleta);
+  } catch (err) {
+    res.status(400).send({ message: err.message });
+  }
 };
 
-const createPaletaController = (req, res) => {
-  const paleta = req.body;
-  const newPaleta = paletasService.createPaletaService(paleta);
-  res.send(newPaleta);
+const createPaletaController = async (req, res) => {
+  try {
+    const onePaleta = req.body;
+    const newPaleta = await paletasService.createPaletaService(onePaleta);
+    res.status(201).send(newPaleta);
+  } catch (err) {
+    res.status(400).send({ message: err.message });
+  }
 };
 
-const updatePaletaController = (req, res) => {
-  const idParam = Number(req.params.id);
-  const paletaEdit = req.body;
-  const updatedPaleta = paletasService.updatePaletaService(idParam, paletaEdit);
-  res.send(updatedPaleta);
+const updatePaletaController = async (req, res) => {
+  try {
+    const idParam = req.params.id;
+    const editPaleta = req.body;
+    const updatedPaleta = await paletasService.updatePaletaService(
+      idParam,
+      editPaleta,
+    );
+    res.send(updatedPaleta);
+  } catch (err) {
+    res.status(400).send({ message: err.message });
+  }
 };
 
-const deletePaletaController = (req, res) => {
-  const idParam = Number(req.params.id);
-  const deletedPaleta = paletasService.deletePaletaService(idParam);
-  res.send({ message: 'Paleta deleted with success!', paleta: deletedPaleta });
+const deletePaletaController = async (req, res) => {
+  try {
+    const idParam = req.params.id;
+    const deletedPaleta = await paletasService.deletePaletaService(idParam);
+    if (deletedPaleta === null || deletedPaleta === undefined) {
+      throw new Error('ID not found!');
+    }
+    res.send({
+      message: 'Successfully deleted Palette!',
+      palette: deletedPaleta,
+    });
+  } catch (err) {
+    return res.status(400).send({ message: err.message });
+  }
 };
 
 module.exports = {
