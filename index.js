@@ -2,14 +2,20 @@ const express = require('express');
 const app = express();
 const cors = require('cors');
 const routes = require('./src/routes/paletas.route');
-
 const port = {};
+
 if (process.env.NODE_ENV !== 'production') {
   require('dotenv').config();
+  port.port = process.env.devPORT;
+  port.url = process.env.devURL;
+} else {
+  port.port = process.env.PORT;
 }
-process.env.NODE_ENV !== 'production'
-  ? (port.port = 3000)
-  : (port.port = process.env.PORT);
+// process.env.NODE_ENV !== 'production'
+//   ? (require('dotenv').config(),
+//     (port.port = process.env.devPORT),
+//     (port.url = process.env.devURL))
+//   : (port.port = process.env.PORT);
 
 const connectToDatabase = require('./src/database/database');
 /* Novo trecho */
@@ -21,7 +27,7 @@ app.use(cors());
 app.use('/paletas', routes);
 
 app.listen(port.port, () => {
-  console.log(`Server listening on ${port.port}`);
+  console.log(`Server listening on ${port.url}`);
 });
 
 /*    npm run dev     */
