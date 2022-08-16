@@ -1,13 +1,14 @@
 const express = require('express');
 const cors = require('cors');
 const routes = require('./src/routes/paletas.route');
+const { mongoURL } = require('./config');
 const connectToDatabase = require('./src/database/database');
 
 const port = 3000;
 const app = express();
 
 
-console.log(process.env.mongoURL);
+console.log(mongoURL);
 /* Novo trecho */
 connectToDatabase();
 /* Novo Trecho */
