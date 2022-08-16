@@ -18,7 +18,7 @@ app.use(cors());
 app.use('/paletas', routes);
 
 app.listen(port, () => {
-  console.log(`Server listening on http://localhost:${port}`);
+  console.log(`Server listening on ${port}`);
 });
 
 /*    npm run dev     */
