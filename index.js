@@ -6,7 +6,7 @@ const routes = require('./src/routes/paletas.route');
 if (process.env.NODE_ENV !== 'production') {
   require('dotenv').config();
 }
-const port = process.env.PORT;
+const port = process.env.NODE_ENV !== 'production' ?  process.env.PORT : 3000;
 
 const connectToDatabase = require('./src/database/database');
 /* Novo trecho */

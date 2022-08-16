@@ -17,10 +17,6 @@
   },
   "servers": [
     {
-      "url": "http://localhost:3000/paletas",
-      "description": "Development server"
-    },
-    {
       "url": "https://api-paletahipster.herokuapp.com/paletas",
       "description": "Production server"
     }
